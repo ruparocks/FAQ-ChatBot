@@ -1,11 +1,3 @@
-/*
- * Copyright 2016-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
 
 /* jshint node: true, devel: true */
 'use strict';
@@ -25,46 +17,37 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
 
+var fbConfig = config.get('Facebook');
+var dbConfig = config.get('Firebase');
+
 firebase.initializeApp({
-  serviceAccount: {"type": "service_account",
-  "project_id": "chatbot-cd678",
-  "private_key_id": "fa848734bf74f5ed5647ce1d3166352432e075c4",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDBIUlntwy5it97\nXj/LWzp58PK4rKXykmU2SQ74a4J6lWHvPp3An6/KflZeiTzW5SwvEsGFG4/5lpX/\nseU+WZCBNVSEvnncTptLQ2Xo3WHd3KOUmK+t3lQUip/Kt30XFUMsmFijWcvscxKl\nSNRp8dLMrA+FsgXSYAVmT0PtlTrN3hYvafUeBreWp7Sycl+GGZ3D9e0zrDnLh4Bc\nPiMVGY9dQ6KtbbzCKysfxV/KFsn+S2bT5i4lmcExPhFTShp80z3UGQr3J8djnpqz\n4zZpl0Qutt6T9jrxd/CK2VlaK8s/0rixfAfnsAQ715O7Y257mk0jcdHFLbMAovXY\nkqyQZDxJAgMBAAECggEBAK1XeRET5OHr2WZbU5rsSPIF53UF0PSFnT46GKuzoyrv\nRTV82A55xUhUWKUFPIwMqbmedf9Im9MC66LSQtXRgbfW7AMxCyNHkm7dEW0OtrZx\nQIkw+g1uTb0aJw3F3wqG1QIDwxrqj/Or3QJo+e4VVITLsirne/40nOQVJPzrQhpf\nOfPBiZkx/Omn+JiOGN/K1WskNbn+p16as1nyVBrg7HvAtlwnUETVWjD3/ffBBwnk\nxewnlRMLNA5ghrfd6OgXkmMiV2MS+fxDQrIobdBPJCc4KzInlIYQ9nKRmrNlmGGo\n77gKqKxon0I2UTmwb4qFCD7kKJqwpmwOMwY6aZJsYgECgYEA5GDxpBvtWheRkCZ5\nR6gamJPQ/rwEOgv+MHLA7+8CGBDQKDsbqC886ACN6bKNydKnb1WIY+zkgLyreiDY\nRTkZNhT+0Gt/nL12G98B50G6/EDlgMcZFzOQL33TtNugqXeXO0F23RA5QvCi9gfo\nQwQmI1Xl5VIQEpj/0SDuoYJvgOECgYEA2Hz5ezP+Vo+K1teDlHf5pzej5XLtnkFg\nhAEJDyAdt+p2YFa9BMZvba8oWvq4R1CXO7jVth7oUI9cl/Gjkwi6M8cxuBkL+S1z\nhY3C/hTR9uZW6d4EN/jTkRe16j7hJelElHS8eamYfnw2UNe+kelEigUPdJR/6ydW\nIedt8EbUYGkCgYEAv3xhX35jBtUYIcuAiQp0MlZOOCghSyJfIPQ2vXajRNZkEjdt\nOxlQch503uvtYrmT1g/bah1ogmCvTplXfMMhVm1IMizQNPXOoBPeHq7IP1WSmOVX\nLlL3pDpWViCIl09EqFR9e2FtAamOmceLgRVrfNk7B4pFG7LZW9nG+/jH0UECgYB6\ni7QFo9bzVOn416IqJwfxOjPSrI4JqWRjFNr17u4jr9s2iaMR0uo8oowrhAVQiTQy\noFyJbVGAWMbHVAeOMcCFktp4JeV7NdlQ3oBkp5B7PMQyOnUU4guQ9GULpnB4r2Uc\nzD/sdq5V2yY7+QRtQCiGIHsxOOZ4TJobMxAulUmfEQKBgQDLVJv32YqOxgngsp6r\nvl0vMwpxbniU49/M4X3tzmAIVzJrADY7mbFkdjwChXYQN4r9+7xDG5H9hHnhpj9k\nZsQicpDR9V/wUugMZQWJxkW8+RGf8rDlPs6NWSPfCuI1orpYV5C/PYfr7mDIsmp9\naOdhwRCqUX2X6ThIreEn0kbFQA==\n-----END PRIVATE KEY-----\n",
-  "client_email": "facebook-connect@chatbot-cd678.iam.gserviceaccount.com",
-  "client_id": "100830184608115531831",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://accounts.google.com/o/oauth2/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/facebook-connect%40chatbot-cd678.iam.gserviceaccount.com"},
+  serviceAccount: dbConfig,
   databaseURL: "https://chatbot-cd678.firebaseio.com"
 });
 
 var db = firebase.database();
 var ref = db.ref("facebook-messager");
 
-/*
- * Be sure to setup your config values before running this code. You can 
- * set them using environment variables or modifying the config file in /config.
- *
- */
-
-process.env.MESSENGER_APP_SECRET = "01395119933abbadedd353ab403b19ee";
-process.env.MESSENGER_VALIDATION_TOKEN = "my_voice_is_my_password";
-process.env.MESSENGER_PAGE_ACCESS_TOKEN = "EAAHeyiutFREBAO12yzaYl5RlnnRthiUjftu4xpvRiiE4eQIpX0AZBGBUmC4NFhPg8NwJomjfGkQKy2kqF3l5SvPCB0dyac6pPZCvnyZBl2Gd1ZAteApZAkZBZBpTp2ZCTMzUtTIWiZBINkQZBz1HKeCwKf9zehsqdC6Xffqwuk5by5BgZDZD";
-process.env.SERVER_URL = "https://hidden-beach-95517.herokuapp.com/";
-
 // App Secret can be retrieved from the App Dashboard
-const APP_SECRET = (process.env.MESSENGER_APP_SECRET);
+const APP_SECRET = (process.env.MESSENGER_APP_SECRET) ? 
+  process.env.MESSENGER_APP_SECRET :
+  fbConfig.appSecret;
 
 // Arbitrary value used to validate a webhook
-const VALIDATION_TOKEN = (process.env.MESSENGER_VALIDATION_TOKEN);
+const VALIDATION_TOKEN = (process.env.MESSENGER_VALIDATION_TOKEN) ?
+  (process.env.MESSENGER_VALIDATION_TOKEN) :
+  fbConfig.validationToken;
 
 // Generate a page access token for your page from the App Dashboard
-const PAGE_ACCESS_TOKEN = (process.env.MESSENGER_PAGE_ACCESS_TOKEN);
+const PAGE_ACCESS_TOKEN = (process.env.MESSENGER_PAGE_ACCESS_TOKEN) ?
+  (process.env.MESSENGER_PAGE_ACCESS_TOKEN) :
+  fbConfig.pageAccessToken;
 
 // URL where the app is running (include protocol). Used to point to scripts and 
 // assets located at this address. 
-const SERVER_URL = (process.env.SERVER_URL);
+const SERVER_URL = (process.env.SERVER_URL) ?
+  (process.env.SERVER_URL) :
+  fbConfig.serverURL;
 
 if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
   console.error("Missing config values");

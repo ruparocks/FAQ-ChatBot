@@ -1,7 +1,7 @@
 {
-  "name": "messenger-get-started",
+  "name": "faq-chatbot",
   "version": "1.0.0",
-  "description": "Get started example for Messenger Platform",
+  "description": "node server on heroku with wit.ai and firebase that communicates with Facebook Messanger",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -10,9 +10,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fbsamples/messenger-platform-samples.git"
+    "url": "https://hidden-beach-95517.herokuapp.com/"
   },
-  "author": "Facebook",
+  "author": "ruparocks",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.0",
